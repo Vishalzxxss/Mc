@@ -1,1 +1,159 @@
 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Manager</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .file-list { 
+            border: 1px solid #ddd; 
+            padding: 15px; 
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .file-item { 
+            display: flex; 
+            justify-content: space-between; 
+            padding: 12px; 
+            border-bottom: 1px solid #eee;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+        .file-item:hover {
+            background: #f8f9fa;
+        }
+        .file-actions a { 
+            margin-left: 10px; 
+            color: #007bff; 
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+        .file-actions a:hover {
+            background: #007bff;
+            color: white;
+        }
+        .upload-form { 
+            margin-top: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .alert { 
+            padding: 10px; 
+            margin-bottom: 15px; 
+            border-radius: 4px; 
+        }
+        .error { 
+            background: #ffebee; 
+            color: #c62828; 
+        }
+        .success { 
+            background: #e8f5e9; 
+            color: #2e7d32; 
+        }
+        .info { 
+            background: #e3f2fd; 
+            color: #1565c0; 
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .logout-btn:hover {
+            background: #c82333;
+            color: white;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+            padding: 10px;
+            border: 2px dashed #ddd;
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h2>🐍 Welcome, {{ username }}!</h2>
+            <small>Project: {{ project_name }}</small>
+        </div>
+        <a href="/logout" class="logout-btn">🚪 Logout</a>
+    </div>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="file-list">
+        <h3>📁 Your Files</h3>
+        {% if files %}
+            {% for file in files %}
+                <div class="file-item">
+                    <span>📄 {{ file.name }} ({{ file.size }} bytes)</span>
+                    <div class="file-actions">
+                        <a href="/download/{{ file.name }}">⬇️ Download</a>
+                        <a href="/edit/{{ file.name }}">✏️ Edit</a>
+                        <a href="/delete/{{ file.name }}" onclick="return confirm('Delete this file?')">🗑️ Delete</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No files uploaded yet. Upload your first Python file!</p>
+        {% endif %}
+    </div>
+
+    <div class="upload-form">
+        <h3>📤 Upload New File</h3>
+        <form method="POST" action="/upload" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".py,.txt,.html,.css,.js,.json,.md" required>
+            <button type="submit">Upload File</button>
+        </form>
+    </div>
+</body>
+      </html>
+
