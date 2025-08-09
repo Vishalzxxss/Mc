@@ -1,0 +1,10 @@
+Flask
+flask-caching
+requests
+pycryptodome
+protobuf
+colorama
+crypto
+psutil
+pytelegrambotapi
+urllib3
